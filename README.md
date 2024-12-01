@@ -1,2 +1,2 @@
-# SubwaySurfers
-Subway Surfers on Steroids created by students
+# Chess3D
+Chess3D on Steroids created by students
