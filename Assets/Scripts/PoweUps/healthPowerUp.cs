@@ -23,6 +23,8 @@ public class HealthPowerUp : MonoBehaviour
             gameObject.AddComponent<FloatingEffect>();
         }
 
+        Destroy(gameObject, 5f);
+
         // Optionally, adjust the linger time if needed
         // Currently, the Destroy is handled within the PowerUpSpawner
     }

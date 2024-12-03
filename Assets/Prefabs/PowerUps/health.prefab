@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -101,9 +101,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthRestoreAmount: 50
   playerTag: Player
-  scaleAnimationDuration: 1
-  bounceAmplitude: 0.5
-  bounceFrequency: 2
 --- !u!61 &-2083803462588181096
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -161,3 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaa8b109a1b361e46bcfb5231b660367, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scaleCycleDuration: 1
+  maxScaleMultiplier: 1.2
+  bounceAmplitude: 0.3
+  bounceFrequency: 1
