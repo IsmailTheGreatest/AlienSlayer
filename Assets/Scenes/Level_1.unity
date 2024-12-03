@@ -8264,8 +8264,8 @@ MonoBehaviour:
   monsterPrefab: {fileID: 8666002222435056722, guid: 3f02edc28744a504d870d4dcd93fc0b3,
     type: 3}
   spawnRate: 2
-  spawnAreaMin: {x: 0, y: 0}
-  spawnAreaMax: {x: 10, y: 10}
+  spawnAreaMin: {x: 2, y: 2}
+  spawnAreaMax: {x: 5, y: 5}
   maxMonsters: 5
   currentLevelIndex: 1
 --- !u!4 &1064015153
