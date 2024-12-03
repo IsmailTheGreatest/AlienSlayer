@@ -98,9 +98,9 @@ public class monster : Physics2DHandler
             HealthSliderController health = collision.gameObject.GetComponent<HealthSliderController>();
             if (health != null)
             {
-                spawner.OnMonsterDestroyed();
+                
                 Destroy(gameObject);
-                health.TakeDamage(15f);
+                health.TakeDamage(20f);
                 Debug.Log("Player health decreased by 15%");
             }
             else
