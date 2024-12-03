@@ -13,6 +13,12 @@ public class HealthSliderController : MonoBehaviour
 
     private float currentHealth; // Current health value
 
+
+    // Property to get the maximum health
+    public float MaxHealth
+    {
+        get { return maxHealth; }
+    }
     // Property to get and set the current health
     public float CurrentHealth
     {
