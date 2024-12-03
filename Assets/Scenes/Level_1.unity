@@ -8266,7 +8266,7 @@ MonoBehaviour:
   spawnRate: 2
   spawnAreaMin: {x: 0, y: 0}
   spawnAreaMax: {x: 10, y: 10}
-  maxMonsters: 5
+  maxMonsters: 10
   currentLevelIndex: 1
 --- !u!4 &1064015153
 Transform:
