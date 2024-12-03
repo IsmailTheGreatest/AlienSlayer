@@ -12790,6 +12790,8 @@ MonoBehaviour:
   spawnRate: 2
   spawnAreaMin: {x: 0, y: 0}
   spawnAreaMax: {x: 10, y: 10}
+  maxMonsters: 5
+  currentLevelIndex: 4
 --- !u!4 &1064015153
 Transform:
   m_ObjectHideFlags: 0

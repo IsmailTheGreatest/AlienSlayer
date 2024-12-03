@@ -6,21 +6,20 @@ public class monster : Physics2DHandler
 {
     private Transform player; // Reference to the player's transform
     public float speed = 2.0f; // Speed of the monster
+    public MonsterSpawner spawner; // Reference to the spawner (set when the monster is spawned)
 
     private Vector3 previousPosition;
     private int framesWithoutMovement = 0;
     private const int MaxFramesStuck = 10;
     private bool movingHorizontally = true;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform; // Find the player
         previousPosition = transform.position;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // Manhattan movement towards the player
         Vector3 direction = player.position - transform.position;
@@ -59,7 +58,6 @@ public class monster : Physics2DHandler
             framesWithoutMovement++;
             if (framesWithoutMovement >= MaxFramesStuck)
             {
-                // Switch movement direction
                 movingHorizontally = !movingHorizontally;
                 framesWithoutMovement = 0;
             }
@@ -72,11 +70,12 @@ public class monster : Physics2DHandler
         previousPosition = transform.position;
     }
 
-    // Handle collision with bullet or player
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Bullet") || collision.CompareTag("Player"))
         {
+            // Notify the spawner before destroying the monster
+            spawner.OnMonsterDestroyed();
             Destroy(gameObject); // Destroy the monster
         }
 
