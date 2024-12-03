@@ -10,6 +10,9 @@ public class MonsterSpawner : MonoBehaviour
     public Vector2 spawnAreaMax; // Maximum x and y coordinates for the spawn area
     public int maxMonsters = 30; // Maximum number of monsters to spawn
     private int currentMonsters = 0; // Current number of spawned monsters
+    private int destroyedMonsters = 0; // Number of monsters destroyed
+    public int currentLevelIndex;
+
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +43,18 @@ public class MonsterSpawner : MonoBehaviour
             Random.Range(spawnAreaMin.x, spawnAreaMax.x),
             Random.Range(spawnAreaMin.y, spawnAreaMax.y)
         );
-        Instantiate(monsterPrefab, spawnPosition, Quaternion.identity);
+        GameObject monster = Instantiate(monsterPrefab, spawnPosition, Quaternion.identity);
+        monster.GetComponent<monster>().spawner = this;
+    }
+
+    public void OnMonsterDestroyed()
+    {
+        destroyedMonsters++;
+
+        // Check if all spawned monsters are destroyed
+        if (destroyedMonsters >= maxMonsters)
+        {
+            GameManager.Instance.MarkLevelComplete(currentLevelIndex);
+        }
     }
 }

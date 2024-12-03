@@ -6,6 +6,7 @@ public class monster : Physics2DHandler
 {
     private Transform player; // Reference to the player's transform
     public float speed = 2.0f; // Speed of the monster
+    public MonsterSpawner spawner; // Reference to the spawner (set when the monster is spawned)
 
     private Vector3 previousPosition;
     private int framesWithoutMovement = 0;
@@ -81,10 +82,12 @@ public class monster : Physics2DHandler
     }
 
     // Handle collision with the player and bullets
-    void OnCollisionEnter2D(Collision2D collision)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Bullet"))
         {
+            spawner.OnMonsterDestroyed();
+
             Destroy(gameObject);
             Debug.Log("Monster destroyed by bullet.");
             return; // Exit to prevent further collision handling
@@ -102,8 +105,20 @@ public class monster : Physics2DHandler
             {
                 Debug.LogWarning("HealthSliderController component not found on Player.");
             }
+            
+        }
 
-            Destroy(gameObject);
+        if (collision.gameObject.CompareTag("EnvironmentTrigger"))
+        {
+            if (collision.gameObject.TryGetComponent(out EnvironmentObjectTrigger trigger))
+            {
+                trigger.SetActiveObjects();
+            }
         }
     }
+
+    protected override void Awake()
+        {
+            base.Awake();
+        }
 }
