@@ -104,9 +104,9 @@ public class Projectile : MonoBehaviour
         if (impactCount > 0)
             return;
 
-        if (collision.CompareTag("Wall"))
+        if (collision.CompareTag("Wall")||collision.CompareTag("Enemy"))
         {
-            // Add +1 to the inpact count.
+            // Add +1 to the impact count.
             impactCount++;
 
             // Spawn the impact visual effect.

@@ -15,53 +15,61 @@ public class monster : Physics2DHandler
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform; // Find the player
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player"); // Find the player
+        if (playerObject != null)
+        {
+            player = playerObject.transform;
+        }
+        else
+        {
+            Debug.LogWarning("Player not found! Ensure the player GameObject is tagged as 'Player'.");
+        }
+
         previousPosition = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (player == null)
+        {
+            // If player is not found, do not attempt to move towards them
+            return;
+        }
+
         // Manhattan movement towards the player
         Vector3 direction = player.position - transform.position;
         Vector2 velocity = Vector2.zero;
 
         if (movingHorizontally)
         {
-            if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
-            {
-                velocity = new Vector2(Mathf.Sign(direction.x) * speed, 0);
-            }
-            else
-            {
-                movingHorizontally = false;
-                velocity = new Vector2(0, Mathf.Sign(direction.y) * speed);
-            }
+            velocity = new Vector2(Mathf.Sign(direction.x), 0) * speed;
         }
         else
         {
-            if (Mathf.Abs(direction.y) > Mathf.Abs(direction.x))
-            {
-                velocity = new Vector2(0, Mathf.Sign(direction.y) * speed);
-            }
-            else
-            {
-                movingHorizontally = true;
-                velocity = new Vector2(Mathf.Sign(direction.x) * speed, 0);
-            }
+            velocity = new Vector2(0, Mathf.Sign(direction.y)) * speed;
         }
 
-        SetVelocity(velocity);
+        // Apply movement with null check for Rigidbody2D
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.velocity = velocity;
+        }
+        else
+        {
+            Debug.LogWarning("Rigidbody2D component is missing on Monster.");
+        }
 
-        // Check if the monster is stuck
-        if (Vector3.Distance(transform.position, previousPosition) < 0.01f)
+        // Check for movement
+        if (transform.position == previousPosition)
         {
             framesWithoutMovement++;
             if (framesWithoutMovement >= MaxFramesStuck)
             {
-                // Switch movement direction
-                movingHorizontally = !movingHorizontally;
+                movingHorizontally = !movingHorizontally; // Change direction if stuck
                 framesWithoutMovement = 0;
+                Debug.Log("Monster is stuck. Changing movement direction to escape.");
             }
         }
         else
@@ -72,30 +80,30 @@ public class monster : Physics2DHandler
         previousPosition = transform.position;
     }
 
-    // Handle collision with bullet or player
-    private void OnTriggerEnter2D(Collider2D collision)
+    // Handle collision with the player and bullets
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.CompareTag("Bullet") || collision.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Bullet"))
         {
-            Destroy(gameObject); // Destroy the monster
+            Destroy(gameObject);
+            Debug.Log("Monster destroyed by bullet.");
+            return; // Exit to prevent further collision handling
         }
 
-        if (collision.CompareTag("Bullet"))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            Destroy(collision.gameObject); // Destroy the bullet
-        }
-
-        if (collision.CompareTag("EnvironmentTrigger"))
-        {
-            if (collision.TryGetComponent(out EnvironmentObjectTrigger trigger))
+            HealthSliderController health = collision.gameObject.GetComponent<HealthSliderController>();
+            if (health != null)
             {
-                trigger.SetActiveObjects();
+                health.TakeDamage(15f);
+                Debug.Log("Player health decreased by 15%");
             }
-        }
-    }
+            else
+            {
+                Debug.LogWarning("HealthSliderController component not found on Player.");
+            }
 
-    protected override void Awake()
-    {
-        base.Awake();
+            Destroy(gameObject);
+        }
     }
 }
